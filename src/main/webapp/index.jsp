@@ -38,11 +38,13 @@
         header {
             background-color: rgba(45, 64, 89, 0.95); /* Semi-transparent dark blue header */
             padding: 20px;
-            text-align: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
             position: sticky; /* Sticky header */
             top: 0;
             z-index: 1000;
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space between home button and title */
+            align-items: center; /* Vertically center items */
         }
 
         header h1 {
@@ -53,10 +55,34 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: color 0.3s ease;
+            flex-grow: 1; /* Allow title to take available space */
+            text-align: center; /* Keep title centered */
         }
 
         header h1:hover {
             color: #ff7f50; /* Lighter orange on hover */
+        }
+
+        /* Home Button Styles */
+        .home-btn {
+            background: linear-gradient(90deg, #4A90E2, #4A90E2); /* Blue gradient */
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(74, 144, 226, 0.6);
+        }
+
+        .home-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4);
         }
 
         #admin-login {
@@ -128,7 +154,7 @@
             background-color: rgba(255, 255, 255, 0.1);
             color: #EEEEEE;
             font-size: 14px;
-            width: 100;
+            width: 100%;
         }
 
         input:focus {
@@ -204,8 +230,17 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            header {
+                padding: 15px;
+            }
+
             header h1 {
                 font-size: 40px;
+            }
+
+            .home-btn {
+                padding: 8px 15px;
+                font-size: 14px;
             }
 
             .container {
@@ -223,8 +258,23 @@
         }
 
         @media (max-width: 480px) {
+            header {
+                padding: 10px;
+                flex-wrap: wrap; /* Allow wrapping if space is tight */
+            }
+
             header h1 {
                 font-size: 32px;
+                order: 1; /* Ensure title stays in the center */
+                flex-basis: 100%; /* Take full width on small screens */
+                text-align: center;
+            }
+
+            .home-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                order: 0; /* Place home button first */
+                margin-bottom: 10px;
             }
 
             .container {
@@ -269,6 +319,7 @@
 <body>
 <!-- Header -->
 <header>
+    <a href="home.jsp" class="home-btn">Home</a>
     <h1 id="title">MegaCityCab</h1>
     <div id="admin-login">
         <a href="index.jsp">Admin Login</a>

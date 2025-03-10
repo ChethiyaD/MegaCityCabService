@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class AuthController extends HttpServlet {
@@ -16,6 +17,9 @@ public class AuthController extends HttpServlet {
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.authenticate(username, password);
+
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
 
         if (user != null) {
             // Store the full User object in session
@@ -27,19 +31,35 @@ public class AuthController extends HttpServlet {
 
             System.out.println("DEBUG: Authenticated User: " + user.getUsername() + ", Role: " + user.getRole());
 
-            // Redirect based on role
-            if ("admin".equals(user.getRole())) {
-                response.sendRedirect("admin_dashboard.jsp");
-            } else if ("driver".equals(user.getRole())) {
-                response.sendRedirect("driver_dashboard.jsp");
-            } else if ("customer".equals(user.getRole())) {
-                response.sendRedirect("customer_dashboard.jsp");
+            // Determine redirect URL based on role
+            String redirectUrl;
+            if ("admin".equalsIgnoreCase(user.getRole())) {
+                redirectUrl = "admin_dashboard.jsp";
+            } else if ("driver".equalsIgnoreCase(user.getRole())) {
+                redirectUrl = "driver_dashboard.jsp";
+            } else if ("customer".equalsIgnoreCase(user.getRole())) {
+                redirectUrl = "customer_dashboard.jsp";
             } else {
-                response.sendRedirect("index.jsp?error=Unauthorized");
+                System.out.println("DEBUG: Unknown role: " + user.getRole());
+                redirectUrl = "index.jsp?error=Unknown role";
+                out.println("<script type='text/javascript'>");
+                out.println("alert('Unknown role assigned');");
+                out.println("window.location.href = '" + redirectUrl + "';");
+                out.println("</script>");
+                return;
             }
+
+            // Send JavaScript response to show alert and redirect
+            out.println("<script type='text/javascript'>");
+            out.println("alert('Successfully logged in');");
+            out.println("window.location.href = '" + redirectUrl + "';");
+            out.println("</script>");
         } else {
             System.out.println("DEBUG: Invalid credentials for username: " + username);
-            response.sendRedirect("index.jsp?error=Invalid credentials");
+            out.println("<script type='text/javascript'>");
+            out.println("alert('Invalid credentials');");
+            out.println("window.location.href = 'index.jsp?error=Invalid credentials';");
+            out.println("</script>");
         }
     }
 }
