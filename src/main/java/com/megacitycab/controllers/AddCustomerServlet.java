@@ -21,17 +21,18 @@ public class AddCustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String username = request.getParameter("username");
-            String password = request.getParameter("password"); // Ensure password is captured
+            String password = request.getParameter("password");
             String name = request.getParameter("name");
             String phone = request.getParameter("phone");
             String nic = request.getParameter("nic");
             String address = request.getParameter("address");
             String status = request.getParameter("status");
+            String email = request.getParameter("email"); // Capture email
             String role = "customer";
 
             if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty() ||
-                    nic == null || nic.trim().isEmpty()) {
-                response.sendRedirect("manage_customers.jsp?error=Username, Password, and NIC cannot be empty");
+                    nic == null || nic.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+                response.sendRedirect("manage_customers.jsp?error=Username, Password, NIC, and Email cannot be empty");
                 return;
             }
 
@@ -55,6 +56,7 @@ public class AddCustomerServlet extends HttpServlet {
             }
 
             User customer = new User(username, password, role, name, address, phone, nic, fileName, 0, status);
+            customer.setEmail(email); // Set email
 
             // Register user
             if (userDAO.registerUser(customer)) {

@@ -20,15 +20,16 @@ import java.nio.file.StandardCopyOption;
 public class EditCustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
-        String password = request.getParameter("password"); // Get password
+        String password = request.getParameter("password");
         String name = request.getParameter("name");
         String phone = request.getParameter("phone");
         String nic = request.getParameter("nic");
         String address = request.getParameter("address");
         String status = request.getParameter("status");
+        String email = request.getParameter("email"); // Capture email
 
-        if (username == null || username.trim().isEmpty()) {
-            response.sendRedirect("manage_customers.jsp?error=Invalid username");
+        if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+            response.sendRedirect("manage_customers.jsp?error=Username and Email cannot be empty");
             return;
         }
 
@@ -62,6 +63,7 @@ public class EditCustomerServlet extends HttpServlet {
         }
 
         User customer = new User(username, password, "customer", name, address, phone, nic, fileName, 0, status);
+        customer.setEmail(email); // Set email
 
         if (userDAO.updateCustomer(customer)) {
             response.sendRedirect("manage_customers.jsp?success=Customer updated successfully");

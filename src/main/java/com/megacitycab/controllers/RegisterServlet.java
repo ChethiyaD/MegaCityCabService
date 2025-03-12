@@ -31,9 +31,16 @@ public class RegisterServlet extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String nic = request.getParameter("nic");
+        String email = request.getParameter("email"); // Capture email
 
         if (!"driver".equals(role)) {
             role = "customer";
+        }
+
+        // Validate email if role is customer
+        if ("customer".equals(role) && (email == null || email.trim().isEmpty())) {
+            response.sendRedirect("register.jsp?error=Email is required for customers");
+            return;
         }
 
         // Handle File Upload
@@ -51,6 +58,9 @@ public class RegisterServlet extends HttpServlet {
 
         // Save user details with profile picture in DB
         User newUser = new User(username, password, role, name, address, phone, nic, fileName);
+        if ("customer".equals(role)) {
+            newUser.setEmail(email); // Set email for customers
+        }
         UserDAO userDAO = new UserDAO();
 
         if (userDAO.registerUser(newUser)) {
