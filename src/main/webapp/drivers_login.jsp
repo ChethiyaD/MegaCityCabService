@@ -3,7 +3,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Driver Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Import Google Fonts for modern typography */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
@@ -19,7 +20,7 @@
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #222831; /* Dark gray background */
-            background-image: url('images/Admin.jpg'); /* Page background image */
+            background-image: url('images/Driver.jpg'); /* Page background image */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -115,7 +116,7 @@
         .container {
             max-width: 400px; /* Compact size for login form */
             width: 100%;
-            padding: 30px;
+            padding: 40px;
             background: rgba(45, 64, 89, 0.9); /* Semi-transparent dark blue container */
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -197,6 +198,30 @@
         a:hover {
             color: #ff7f50;
             text-decoration: underline;
+        }
+
+        /* Password Container for Eye Icon */
+        .password-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-container input {
+            width: 100%;
+            padding-right: 40px; /* Space for the eye icon */
+        }
+
+        .password-container .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #FF5722; /* Orange color for the icon */
+        }
+
+        .password-container .toggle-password:hover {
+            color: #ff7f50; /* Lighter orange on hover */
         }
 
         /* Footer Styles */
@@ -329,18 +354,23 @@
 <!-- Main Content -->
 <main>
     <div class="container">
-        <h2>Login</h2>
+        <h2>Driver Login</h2>
         <% String error = request.getParameter("error");
             if (error != null) { %>
         <p class="error"><%= error %></p>
         <% } %>
         <form action="login" method="post">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required><br>
+            <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br>
+            <div class="password-container">
+                <input type="password" id="password" name="password" required>
+                <i class="fas fa-eye toggle-password" id="togglePasswordIcon" onclick="togglePassword()"></i>
+            </div>
             <button type="submit">Login</button>
         </form>
+        <p><a href="reset_password_step1.jsp">Forgot Password?</a></p>
+        <p><a href="register.jsp">Register</a></p>
     </div>
 </main>
 
@@ -353,7 +383,7 @@
     <p>© 2025 MegaCityCab. All rights reserved.</p>
 </footer>
 
-<!-- JavaScript for Admin Login reveal and button animation -->
+<!-- JavaScript for Admin Login reveal, button animation, and password toggle -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Ensure the page starts at the top
@@ -379,6 +409,21 @@
                 setTimeout(() => button.classList.remove('clicked'), 300); // Remove class after animation
             });
         });
+
+        // Toggle password visibility
+        window.togglePassword = function() {
+            const passwordInput = document.getElementById("password");
+            const toggleIcon = document.getElementById("togglePasswordIcon");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        };
     });
 </script>
 </body>

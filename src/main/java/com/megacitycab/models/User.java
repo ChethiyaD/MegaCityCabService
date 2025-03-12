@@ -1,7 +1,6 @@
 package com.megacitycab.models;
 
 public class User {
-    private int id;
     private String username;
     private String password;
     private String role;
@@ -10,13 +9,11 @@ public class User {
     private String phone;
     private String nic;
     private String profilePicture;
-    private int experience;  // Driver experience
-    private String status;   // Driver availability status
+    private int experience;
+    private String status;
+    private String email; // New field
 
-    // Default Constructor
-    public User() {}
-
-    // Constructor for Customers (no experience & status)
+    // Constructor for registration (without experience and status)
     public User(String username, String password, String role, String name, String address, String phone, String nic, String profilePicture) {
         this.username = username;
         this.password = password;
@@ -26,11 +23,10 @@ public class User {
         this.phone = phone;
         this.nic = nic;
         this.profilePicture = profilePicture;
-        this.experience = 0;  // Default for customers
-        this.status = null;   // Customers don't have a status
+        this.email = null; // Default to null
     }
 
-    // Constructor for Drivers (includes experience & status)
+    // Constructor for Add/Edit Customer (with experience and status)
     public User(String username, String password, String role, String name, String address, String phone, String nic, String profilePicture, int experience, String status) {
         this.username = username;
         this.password = password;
@@ -42,12 +38,10 @@ public class User {
         this.profilePicture = profilePicture;
         this.experience = experience;
         this.status = status;
+        this.email = null; // Default to null
     }
 
-    // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
+    // Getters and setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
@@ -77,4 +71,8 @@ public class User {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    // New getter and setter for email
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 }

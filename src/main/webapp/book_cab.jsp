@@ -1,9 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="com.megacitycab.dao.CarDAO, com.megacitycab.models.Car, java.util.List" %>
+
+<%
+    CarDAO carDAO = new CarDAO();
+    List<Car> availableCars = carDAO.getAvailableCars(); // Fetch only available cars
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Book a Cab</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -11,10 +18,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
+    <script>
+        function updateCarImage() {
+            var selectedCar = document.getElementById("carSelect");
+            var carImage = document.getElementById("carImage");
+
+            if (selectedCar.value) {
+                var image = selectedCar.options[selectedCar.selectedIndex].getAttribute("data-image");
+                carImage.src = "uploads/" + image;
+            } else {
+                carImage.src = "uploads/default.png"; // Show default if no car selected
+            }
+        }
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body {
-            height: 100%;
+        body {
             font-family: 'Roboto', sans-serif;
             background-color: #222831;
             background-image: url('images/Customer.jpg');
@@ -23,12 +42,12 @@
             background-attachment: fixed;
             color: #EEEEEE;
             line-height: 1.6;
-            overflow-x: hidden;
-        }
-        body {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Ensure body takes at least full viewport height */
+            overflow-x: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
         header {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
@@ -45,33 +64,28 @@
             color: #FF5722;
             font-weight: 700;
             text-transform: uppercase;
-            margin: 0;
         }
         main {
-            flex: 1 0 auto;
+            flex: 1;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 10px;
+            align-items: center;
+            padding: 20px;
+            min-height: calc(100vh - 120px);
         }
         .container {
+            max-width: 1200px;
             width: 100%;
-            max-width: 600px; /* Consistent with profile pages */
-            padding: 20px;
+            padding: 30px;
             background: linear-gradient(135deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
             border-radius: 15px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
             animation: fadeIn 0.6s ease-in-out;
-            /* Removed max-height and overflow-y to allow page-level scrolling */
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
         }
         h2 {
             font-family: 'Montserrat', sans-serif;
@@ -79,24 +93,16 @@
             color: #FF5722;
             margin-bottom: 20px;
         }
-        #message {
-            display: none;
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 15px;
-            background: linear-gradient(90deg, #F44336, #EF5350);
-            border-radius: 25px;
-            text-align: center;
-            font-weight: 500;
-            color: #FFFFFF;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.5);
-            animation: fadeIn 0.5s ease-in, fadeOut 0.5s ease-out 3s forwards;
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #F44336; /* Red for error messages */
         }
         form {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-width: 400px;
+            max-width: 500px;
             margin: 0 auto;
         }
         label {
@@ -106,8 +112,6 @@
             text-align: left;
         }
         input[type="text"],
-        input[type="password"],
-        input[type="file"],
         select {
             padding: 10px;
             font-size: 14px;
@@ -121,14 +125,12 @@
             transition: box-shadow 0.3s ease;
         }
         input[type="text"]:focus,
-        input[type="password"]:focus,
-        input[type="file"]:focus,
         select:focus {
             outline: none;
             box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
             border-color: #FF5722;
         }
-        button[type="submit"] {
+        input[type="submit"] {
             padding: 10px 25px;
             background: linear-gradient(90deg, #FF5722, #FF7043);
             color: #FFFFFF;
@@ -139,20 +141,47 @@
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        button[type="submit"]:hover {
+        input[type="submit"]:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 18px rgba(255, 87, 34, 0.6);
         }
-        button[type="submit"]:active {
+        input[type="submit"]:active {
             transform: translateY(0);
             box-shadow: 0 2px 8px rgba(255, 87, 34, 0.4);
+        }
+        #carImage {
+            width: 150px;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 2px solid #FF5722;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        a.back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: linear-gradient(90deg, #4A90E2, #4A90E2);
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 25px; /* Rounded as in Manage Customers */
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        a.back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(74, 144, 226, 0.6);
         }
         footer {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
             padding: 20px;
             text-align: center;
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
-            flex-shrink: 0;
+            margin-top: 20px;
+        }
+        footer .links {
+            margin-bottom: 10px;
         }
         footer .links a {
             color: #FF5722;
@@ -167,88 +196,71 @@
         footer p {
             font-size: 12px;
             color: #CCCCCC;
-            margin: 0;
         }
         @media (max-width: 768px) {
             header h2 { font-size: 36px; }
-            .container { padding: 15px; }
+            .container { padding: 20px; }
             h2 { font-size: 30px; }
-            #message { max-width: 100%; padding: 10px; }
-            input[type="text"], input[type="password"], input[type="file"], select { font-size: 14px; }
-            button[type="submit"] { padding: 8px 20px; font-size: 14px; }
+            p { font-size: 16px; }
+            input[type="text"],
+            select { font-size: 14px; }
+            input[type="submit"],
+            a.back-btn { padding: 8px 20px; font-size: 14px; }
+            #carImage { width: 120px; }
         }
         @media (max-width: 480px) {
             header { padding: 15px; }
             header h2 { font-size: 28px; }
-            .container { padding: 10px; }
+            .container { padding: 15px; }
             h2 { font-size: 24px; }
-            #message { font-size: 12px; }
-            input[type="text"], input[type="password"], input[type="file"], select { font-size: 12px; }
-            button[type="submit"] { padding: 6px 15px; font-size: 12px; }
+            p { font-size: 14px; }
+            input[type="text"],
+            select { font-size: 12px; }
+            input[type="submit"],
+            a.back-btn { padding: 6px 15px; font-size: 12px; }
+            #carImage { width: 100px; }
             footer .links a { display: block; margin: 5px 0; }
         }
     </style>
-
-    <script>
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const error = urlParams.get('error');
-            const messageDiv = document.getElementById("message");
-
-            if (error) {
-                messageDiv.textContent = error;
-                messageDiv.style.display = "block";
-                setTimeout(() => {
-                    messageDiv.style.opacity = "0";
-                    setTimeout(() => {
-                        messageDiv.style.display = "none";
-                        messageDiv.style.opacity = "1";
-                    }, 500);
-                }, 3000);
-            }
-        };
-    </script>
 </head>
 <body>
 <!-- Header -->
 <header>
-    <h2>Registration</h2>
+    <h2>Book a Cab</h2>
 </header>
 
 <!-- Main Content -->
 <main>
     <div class="container">
-        <div id="message"></div>
-        <form action="register" method="post" enctype="multipart/form-data">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+        <% if (availableCars.isEmpty()) { %>
+        <p>No available cars at the moment. Please check back later.</p>
+        <a href="customer_dashboard.jsp" class="back-btn">Back to Dashboard</a>
+        <% } else { %>
+        <form action="BookCabServlet" method="post">
+            <label>Pickup Location:</label>
+            <input type="text" name="pickup_location" class="form-control" required><br>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <label>Dropoff Location:</label>
+            <input type="text" name="dropoff_location" class="form-control" required><br>
 
-            <label for="role">Role:</label>
-            <select id="role" name="role" required>
-                <option value="customer">Customer</option>
-                <option value="driver">Driver</option>
+            <label>Select Car:</label>
+            <select name="car_id" id="carSelect" class="form-control" onchange="updateCarImage()">
+                <% for (Car car : availableCars) { %>
+                <option value="<%= car.getId() %>" data-image="<%= car.getImage() %>">
+                    <%= car.getCarName() %> - <%= car.getCarNumber() %>
+                </option>
+                <% } %>
             </select>
 
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <br>
+            <img id="carImage" src="uploads/<%= availableCars.get(0).getImage() %>" alt="Car Image"><br>
 
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required>
-
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required>
-
-            <label for="nic">NIC:</label>
-            <input type="text" id="nic" name="nic" required>
-
-            <label for="profile_picture">Profile Picture:</label>
-            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
-
-            <button type="submit">Register</button>
+            <input type="submit" value="Book Now" class="btn btn-primary">
         </form>
+
+        <br>
+        <a href="customer_dashboard.jsp" class="back-btn mt-3">Back to Dashboard</a>
+        <% } %>
     </div>
 </main>
 
