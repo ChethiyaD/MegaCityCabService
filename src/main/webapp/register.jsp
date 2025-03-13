@@ -22,8 +22,8 @@
             background-position: center;
             background-attachment: fixed;
             color: #EEEEEE;
-            line-height: 1.6;
-            overflow-x: hidden;
+            line-height: 1.4;
+            overflow: hidden; /* Prevent scrolling */
         }
         body {
             display: flex;
@@ -32,16 +32,17 @@
         }
         header {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             position: sticky;
             top: 0;
             z-index: 1000;
+            flex-shrink: 0;
         }
         header h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 48px;
+            font-size: 36px;
             color: #FF5722;
             font-weight: 700;
             text-transform: uppercase;
@@ -51,21 +52,25 @@
             flex: 1 0 auto;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 10px;
+            align-items: center; /* Center vertically */
+            padding: 5px;
         }
         .container {
             width: 100%;
-            max-width: 600px;
-            padding: 20px;
+            max-width: 500px;
+            padding: 15px;
             background: linear-gradient(135deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             text-align: center;
             animation: fadeIn 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 10px); /* Fit within main, accounting for padding */
+            justify-content: center;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeOut {
@@ -74,44 +79,56 @@
         }
         h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 36px;
+            font-size: 24px;
             color: #FF5722;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
         }
         #message {
             display: none;
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 15px;
-            background: linear-gradient(90deg, #F44336, #EF5350);
-            border-radius: 25px;
+            max-width: 350px;
+            margin: 10px auto;
+            padding: 8px;
+            border-radius: 20px;
             text-align: center;
             font-weight: 500;
             color: #FFFFFF;
-            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             animation: fadeIn 0.5s ease-in, fadeOut 0.5s ease-out 3s forwards;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        #message.success {
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.5);
+        }
+        #message.error {
+            background: linear-gradient(90deg, #F44336, #EF5350);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.5);
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            max-width: 400px;
+            gap: 8px;
+            max-width: 350px;
             margin: 0 auto;
+            flex-grow: 1; /* Allow form to take available space */
         }
         label {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             color: #EEEEEE;
             text-align: left;
+            margin-bottom: 2px;
         }
         input[type="text"],
         input[type="password"],
         input[type="file"],
         select {
-            padding: 10px;
-            font-size: 14px;
+            padding: 6px;
+            font-size: 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #4A90E2;
             color: #EEEEEE;
@@ -124,7 +141,7 @@
         input[type="file"]:focus,
         select:focus {
             outline: none;
-            box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+            box-shadow: 0 0 8px rgba(255, 87, 34, 0.5);
             border-color: #FF5722;
         }
         input.invalid {
@@ -133,33 +150,35 @@
         }
         .error-text {
             color: #F44336;
-            font-size: 12px;
+            font-size: 10px;
             display: none;
-            margin-top: 5px;
+            margin-top: 2px;
             text-align: left;
         }
         button[type="submit"] {
-            padding: 10px 25px;
+            padding: 8px 20px;
             background: linear-gradient(90deg, #FF5722, #FF7043);
             color: #FFFFFF;
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+            flex-shrink: 0;
         }
         button[type="submit"]:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 18px rgba(255, 87, 34, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 87, 34, 0.6);
         }
         button[type="submit"]:active {
             transform: translateY(0);
-            box-shadow: 0 2px 8px rgba(255, 87, 34, 0.4);
+            box-shadow: 0 2px 6px rgba(255, 87, 34, 0.4);
         }
         footer {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
             flex-shrink: 0;
@@ -167,35 +186,38 @@
         footer .links a {
             color: #FF5722;
             text-decoration: none;
-            margin: 0 15px;
-            font-size: 14px;
+            margin: 0 10px;
+            font-size: 12px;
             transition: color 0.3s ease;
         }
         footer .links a:hover {
             color: #4A90E2;
         }
         footer p {
-            font-size: 12px;
+            font-size: 10px;
             color: #CCCCCC;
             margin: 0;
         }
         @media (max-width: 768px) {
-            header h2 { font-size: 36px; }
-            .container { padding: 15px; }
-            h2 { font-size: 30px; }
-            #message { max-width: 100%; padding: 10px; }
-            input[type="text"], input[type="password"], input[type="file"], select { font-size: 14px; }
-            button[type="submit"] { padding: 8px 20px; font-size: 14px; }
+            header h2 { font-size: 30px; }
+            .container { padding: 10px; }
+            h2 { font-size: 20px; }
+            #message { max-width: 300px; padding: 6px; font-size: 12px; }
+            input[type="text"], input[type="password"], input[type="file"], select { font-size: 11px; }
+            button[type="submit"] { padding: 6px 15px; font-size: 12px; }
         }
         @media (max-width: 480px) {
-            header { padding: 15px; }
-            header h2 { font-size: 28px; }
-            .container { padding: 10px; }
-            h2 { font-size: 24px; }
-            #message { font-size: 12px; }
-            input[type="text"], input[type="password"], input[type="file"], select { font-size: 12px; }
-            button[type="submit"] { padding: 6px 15px; font-size: 12px; }
-            footer .links a { display: block; margin: 5px 0; }
+            header { padding: 10px; }
+            header h2 { font-size: 24px; }
+            .container { padding: 8px; max-width: 400px; }
+            h2 { font-size: 18px; }
+            #message { font-size: 11px; padding: 5px; }
+            label { font-size: 12px; }
+            input[type="text"], input[type="password"], input[type="file"], select { font-size: 10px; padding: 5px; }
+            .error-text { font-size: 8px; }
+            button[type="submit"] { padding: 5px 12px; font-size: 11px; }
+            footer .links a { display: block; margin: 3px 0; }
+            footer p { font-size: 9px; }
         }
     </style>
 
@@ -206,15 +228,7 @@
             const messageDiv = document.getElementById("message");
 
             if (error) {
-                messageDiv.textContent = error;
-                messageDiv.style.display = "block";
-                setTimeout(() => {
-                    messageDiv.style.opacity = "0";
-                    setTimeout(() => {
-                        messageDiv.style.display = "none";
-                        messageDiv.style.opacity = "1";
-                    }, 500);
-                }, 3000);
+                showMessage(error, 'error');
             }
 
             // Real-time validation
@@ -224,6 +238,7 @@
             const addressInput = document.getElementById('address');
             const phoneInput = document.getElementById('phone');
             const nicInput = document.getElementById('nic');
+            const roleInput = document.getElementById('role');
 
             usernameInput.addEventListener('input', validateUsername);
             passwordInput.addEventListener('input', validatePassword);
@@ -345,7 +360,7 @@
                 }
             }
 
-            window.validateForm = function() {
+            function validateForm() {
                 const isUsernameValid = validateUsername();
                 const isPasswordValid = validatePassword();
                 const isNameValid = validateName();
@@ -353,7 +368,50 @@
                 const isPhoneValid = validatePhone();
                 const isNicValid = validateNic();
                 return isUsernameValid && isPasswordValid && isNameValid && isAddressValid && isPhoneValid && isNicValid;
-            };
+            }
+
+            // Handle form submission with AJAX
+            document.querySelector('form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!validateForm()) return;
+
+                const formData = new FormData(this);
+                fetch('register', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === "success") {
+                            showMessage('Registration successful! Redirecting to login...', 'success', () => {
+                                const redirectUrl = data.role === "customer" ? "customers_login.jsp" : "drivers_login.jsp";
+                                window.location.href = redirectUrl;
+                            });
+                            document.querySelector('form').reset(); // Clear form
+                        } else {
+                            showMessage('Registration failed! Try again.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showMessage('An error occurred. Please try again.', 'error');
+                        console.error('Error:', error);
+                    });
+            });
+
+            function showMessage(text, type, callback) {
+                const messageDiv = document.getElementById("message");
+                messageDiv.textContent = text;
+                messageDiv.className = 'message ' + type; // Add success or error class
+                messageDiv.style.display = "block";
+                setTimeout(() => {
+                    messageDiv.style.opacity = "0";
+                    setTimeout(() => {
+                        messageDiv.style.display = "none";
+                        messageDiv.style.opacity = "1";
+                        if (callback) callback(); // Execute callback after fade out
+                    }, 500);
+                }, 3000);
+            }
         };
     </script>
 </head>
@@ -367,7 +425,7 @@
 <main>
     <div class="container">
         <div id="message"></div>
-        <form action="register" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+        <form enctype="multipart/form-data" onsubmit="return false;">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <span id="username-error" class="error-text"></span>

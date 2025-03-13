@@ -13,6 +13,7 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/register")
 @MultipartConfig(
@@ -31,41 +32,35 @@ public class RegisterServlet extends HttpServlet {
         String address = request.getParameter("address");
         String phone = request.getParameter("phone");
         String nic = request.getParameter("nic");
-        String email = request.getParameter("email"); // Capture email
 
         if (!"driver".equals(role)) {
             role = "customer";
         }
 
-        // Validate email if role is customer
-        if ("customer".equals(role) && (email == null || email.trim().isEmpty())) {
-            response.sendRedirect("register.jsp?error=Email is required for customers");
-            return;
-        }
-
         // Handle File Upload
         Part filePart = request.getPart("profile_picture");
-        String fileName = "default.png"; // Default profile picture
+        String fileName = "default.png";
 
         if (filePart != null && filePart.getSize() > 0) {
-            fileName = username + "_" + System.currentTimeMillis() + ".png"; // Unique filename
+            fileName = username + "_" + System.currentTimeMillis() + ".png";
             String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
             File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) uploadDir.mkdir(); // Create uploads directory if it doesn't exist
+            if (!uploadDir.exists()) uploadDir.mkdir();
 
-            filePart.write(uploadPath + File.separator + fileName); // Save file
+            filePart.write(uploadPath + File.separator + fileName);
         }
 
-        // Save user details with profile picture in DB
         User newUser = new User(username, password, role, name, address, phone, nic, fileName);
-        if ("customer".equals(role)) {
-        }
         UserDAO userDAO = new UserDAO();
 
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+
         if (userDAO.registerUser(newUser)) {
-            response.sendRedirect("index.jsp?success=Registration successful! Please log in.");
+            out.print("{\"status\": \"success\", \"role\": \"" + role + "\"}");
         } else {
-            response.sendRedirect("register.jsp?error=Registration failed! Try again.");
+            out.print("{\"status\": \"error\"}");
         }
+        out.flush();
     }
 }

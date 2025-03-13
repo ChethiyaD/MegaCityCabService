@@ -1,9 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%
+    HttpSession sessionObj = request.getSession(false);
+    String role = (sessionObj != null) ? (String) sessionObj.getAttribute("role") : null;
+
+    // Block access for customers and drivers
+    if (role != null && ("customer".equalsIgnoreCase(role) || "driver".equalsIgnoreCase(role))) {
+        response.sendRedirect("index.jsp?error=Unauthorized access");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Login - MegaCityCab</title>
     <style>
         /* Import Google Fonts for modern typography */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
@@ -28,8 +39,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            /* Blur effect for the background */
+            overflow: hidden; /* Prevent scrolling */
             backdrop-filter: blur(5px); /* Slight blur */
             -webkit-backdrop-filter: blur(5px); /* Safari support */
         }
@@ -109,7 +119,6 @@
             justify-content: center;
             align-items: center;
             padding: 20px 0;
-            min-height: calc(100vh - 120px); /* Adjust for header and footer */
         }
 
         .container {
@@ -205,6 +214,7 @@
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
         }
 
         footer .links {
@@ -319,10 +329,10 @@
 <body>
 <!-- Header -->
 <header>
-    <a href="home.jsp" class="home-btn">Home</a>
+    <a href="index.jsp" class="home-btn">Home</a>
     <h1 id="title">MegaCityCab</h1>
     <div id="admin-login">
-        <a href="index.jsp">Admin Login</a>
+        <a href="home.jsp">Admin Login</a>
     </div>
 </header>
 
@@ -335,6 +345,7 @@
         <p class="error"><%= error %></p>
         <% } %>
         <form action="login" method="post">
+            <input type="hidden" name="source" value="admin">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br>
             <label for="password">Password:</label>
@@ -363,7 +374,7 @@
         const adminLogin = document.getElementById('admin-login');
         let clickCount = 0;
 
-        // Reveal Admin Login after 3 clicks on the title
+        // Reveal Admin Login after 3 clicks on the title (optional feature)
         title.addEventListener('click', () => {
             clickCount++;
             if (clickCount === 3) {
@@ -379,6 +390,21 @@
                 setTimeout(() => button.classList.remove('clicked'), 300); // Remove class after animation
             });
         });
+
+        // Display error from URL if present
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            const errorElement = document.querySelector('.error');
+            if (errorElement) {
+                errorElement.textContent = error;
+            } else {
+                const newError = document.createElement('p');
+                newError.className = 'error';
+                newError.textContent = error;
+                document.querySelector('.container').insertBefore(newError, document.querySelector('form'));
+            }
+        }
     });
 </script>
 </body>
