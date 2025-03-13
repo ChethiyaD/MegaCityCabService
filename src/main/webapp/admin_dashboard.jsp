@@ -372,6 +372,10 @@
                 <i class="fas fa-book"></i>
                 <a href="manage_bookings.jsp">Manage Bookings</a>
             </div>
+            <div class="control-card">
+                <i class="fas fa-chart-bar"></i>
+                <a href="MonthlyBookingReportServlet">Monthly Report</a>
+            </div>
         </div>
     </div>
 </main>

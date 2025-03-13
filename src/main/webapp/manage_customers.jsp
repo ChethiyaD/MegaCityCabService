@@ -190,8 +190,8 @@
             font-weight: 700;
         }
         .modal-body {
-            max-height: 60vh; /* Limit the height of the modal body */
-            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 60vh;
+            overflow-y: auto;
             padding: 20px;
         }
         .modal-body label { font-weight: 500; }
@@ -272,7 +272,7 @@
         }
         .password-container input {
             width: 100%;
-            padding-right: 40px; /* Space for the eye icon */
+            padding-right: 40px;
         }
         .password-container .toggle-password {
             position: absolute;
@@ -311,7 +311,7 @@
     </style>
 
     <script>
-        function openEditModal(username, name, phone, nic, address, email, profilePicture) { // Added email parameter
+        function openEditModal(username, name, phone, nic, address, profilePicture) {
             document.getElementById("editModalTitle").innerText = username ? "Edit Customer" : "Add Customer";
             document.getElementById("editUsername").value = username || '';
             document.getElementById("editUsername").readOnly = !!username;
@@ -320,7 +320,6 @@
             document.getElementById("editPhone").value = phone || '';
             document.getElementById("editNic").value = nic || '';
             document.getElementById("editAddress").value = address || '';
-            document.getElementById("editEmail").value = email || ''; // Set email
             document.getElementById("currentProfilePicture").src = "uploads/" + (profilePicture || "default.png");
             document.getElementById("editForm").action = username ? "EditCustomerServlet" : "AddCustomerServlet";
             new bootstrap.Modal(document.getElementById("editCustomerModal")).show();
@@ -335,10 +334,9 @@
                 let name = row.cells[1].textContent.toLowerCase();
                 let phone = row.cells[2].textContent.toLowerCase();
                 let nic = row.cells[3].textContent.toLowerCase();
-                let email = row.cells[4].textContent.toLowerCase(); // Include email in search
-                let address = row.cells[5].textContent.toLowerCase();
+                let address = row.cells[4].textContent.toLowerCase();
 
-                if (username.includes(input) || name.includes(input) || phone.includes(input) || nic.includes(input) || email.includes(input) || address.includes(input)) {
+                if (username.includes(input) || name.includes(input) || phone.includes(input) || nic.includes(input) || address.includes(input)) {
                     row.style.display = "";
                 } else {
                     row.style.display = "none";
@@ -387,9 +385,9 @@
 <main>
     <div class="container">
         <input type="text" id="searchInput" class="form-control mb-3"
-               placeholder="Search by Username, Name, Phone, NIC, Email, or Address" onkeyup="searchCustomers()">
+               placeholder="Search by Username, Name, Phone, NIC, or Address" onkeyup="searchCustomers()">
 
-        <button type="button" class="btn btn-primary" onclick="openEditModal('', '', '', '', '', '', 'default.png')">
+        <button type="button" class="btn btn-primary" onclick="openEditModal('', '', '', '', '', 'default.png')">
             Add Customer
         </button>
 
@@ -402,7 +400,6 @@
                 <th>Name</th>
                 <th>Phone</th>
                 <th>NIC</th>
-                <th>Email</th> <!-- New column -->
                 <th>Address</th>
                 <th>Profile Picture</th>
                 <th>Actions</th>
@@ -415,7 +412,6 @@
                 <td><%= customer.getName() %></td>
                 <td><%= customer.getPhone() %></td>
                 <td><%= customer.getNic() %></td>
-                <td><%= customer.getEmail() != null ? customer.getEmail() : "Not Set" %></td> <!-- Display email -->
                 <td><%= customer.getAddress() != null ? customer.getAddress() : "Not Set" %></td>
                 <td>
                     <img src="uploads/<%= customer.getProfilePicture() %>" alt="Profile Picture" width="50">
@@ -427,7 +423,6 @@
                             '<%= customer.getPhone() %>',
                             '<%= customer.getNic() %>',
                             '<%= customer.getAddress() %>',
-                            '<%= customer.getEmail() %>', // Pass email
                             '<%= customer.getProfilePicture() %>'
                             )">Edit</button>
                     <form action="DeleteCustomerServlet" method="post" style="display:inline;">
@@ -466,9 +461,6 @@
 
                             <label>NIC:</label>
                             <input type="text" name="nic" id="editNic" class="form-control" required><br>
-
-                            <label>Email:</label> <!-- New field -->
-                            <input type="email" name="email" id="editEmail" class="form-control" required><br>
 
                             <label>Address:</label>
                             <input type="text" name="address" id="editAddress" class="form-control" required><br>

@@ -287,6 +287,9 @@
             <label for="cvv">CVV:</label>
             <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3">
 
+            <label for="email">Email for Confirmation:</label>
+            <input type="email" id="email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="example@email.com">
+
             <input type="submit" value="Submit Payment">
         </form>
 

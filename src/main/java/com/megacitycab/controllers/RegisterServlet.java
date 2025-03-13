@@ -59,7 +59,6 @@ public class RegisterServlet extends HttpServlet {
         // Save user details with profile picture in DB
         User newUser = new User(username, password, role, name, address, phone, nic, fileName);
         if ("customer".equals(role)) {
-            newUser.setEmail(email); // Set email for customers
         }
         UserDAO userDAO = new UserDAO();
 
