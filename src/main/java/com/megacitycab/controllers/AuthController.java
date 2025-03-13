@@ -23,7 +23,7 @@ public class AuthController extends HttpServlet {
 
         // Get the source parameter to determine the context
         String source = request.getParameter("source");
-        String redirectOnFailure = "index.jsp"; // Default to admin login page for initial attempts
+        String redirectOnFailure = "home.jsp"; // Default to admin login page for initial attempts
 
         // Determine the context based on the source parameter
         if ("customer".equalsIgnoreCase(source)) {

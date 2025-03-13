@@ -59,9 +59,9 @@
             background-position: center;
             background-attachment: fixed;
             color: #EEEEEE;
-            line-height: 1.4; /* Reduced line height */
+            line-height: 1.4;
             overflow-x: hidden;
-            overflow-y: auto; /* Allow page scrolling if needed, but aim to fit */
+            overflow-y: auto;
         }
         body {
             display: flex;
@@ -70,7 +70,7 @@
         }
         header {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
-            padding: 15px; /* Reduced padding */
+            padding: 15px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             position: sticky;
@@ -79,7 +79,7 @@
         }
         header h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 36px; /* Slightly smaller */
+            font-size: 36px;
             color: #FF5722;
             font-weight: 700;
             text-transform: uppercase;
@@ -90,14 +90,14 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 5px; /* Reduced padding */
+            padding: 5px;
         }
         .container {
             width: 100%;
-            max-width: 500px; /* Smaller max-width */
-            padding: 15px; /* Reduced padding */
+            max-width: 500px;
+            padding: 15px;
             background: linear-gradient(135deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
-            border-radius: 10px; /* Slightly smaller radius */
+            border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             text-align: center;
             animation: fadeIn 0.6s ease-in-out;
@@ -108,24 +108,24 @@
         }
         h2 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 24px; /* Reduced size */
+            font-size: 24px;
             color: #FF5722;
-            margin-bottom: 10px; /* Reduced margin */
+            margin-bottom: 10px;
         }
         table {
             border-collapse: collapse;
             width: 100%;
             background: rgba(74, 144, 226, 0.1);
-            border-radius: 8px; /* Smaller radius */
+            border-radius: 8px;
             overflow: hidden;
-            margin-bottom: 10px; /* Reduced margin */
+            margin-bottom: 10px;
         }
         th, td {
             border: 1px solid #4A90E2;
-            padding: 8px; /* Reduced padding */
+            padding: 8px;
             text-align: left;
             color: #EEEEEE;
-            font-size: 14px; /* Smaller font */
+            font-size: 14px;
         }
         th {
             background: linear-gradient(90deg, #4A90E2, #4A90E2);
@@ -139,23 +139,24 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 8px; /* Reduced gap */
-            max-width: 350px; /* Smaller max-width */
+            gap: 8px;
+            max-width: 350px;
             margin: 0 auto;
         }
         label {
-            font-size: 14px; /* Reduced size */
+            font-size: 14px;
             font-weight: 500;
             color: #EEEEEE;
             text-align: left;
-            margin-bottom: 2px; /* Reduced margin */
+            margin-bottom: 2px;
         }
         input[type="text"],
+        input[type="email"],
         input[type="hidden"] {
-            padding: 6px; /* Reduced padding */
-            font-size: 12px; /* Smaller font */
+            padding: 6px;
+            font-size: 12px;
             border: none;
-            border-radius: 8px; /* Smaller radius */
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid #4A90E2;
             color: #EEEEEE;
@@ -163,25 +164,26 @@
             box-sizing: border-box;
             transition: box-shadow 0.3s ease;
         }
-        input[type="text"]:focus {
+        input[type="text"]:focus,
+        input[type="email"]:focus {
             outline: none;
             box-shadow: 0 0 8px rgba(255, 87, 34, 0.5);
             border-color: #FF5722;
         }
         input[type="hidden"] { display: none; }
         input[type="submit"] {
-            padding: 8px 20px; /* Reduced padding */
+            padding: 8px 20px;
             background: linear-gradient(90deg, #FF5722, #FF7043);
             color: #FFFFFF;
             border: none;
-            border-radius: 20px; /* Smaller radius */
-            font-size: 14px; /* Smaller font */
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         input[type="submit"]:hover {
-            transform: translateY(-2px); /* Smaller lift */
+            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(255, 87, 34, 0.6);
         }
         input[type="submit"]:active {
@@ -190,23 +192,23 @@
         }
         a.cancel-btn {
             display: inline-block;
-            margin-top: 10px; /* Reduced margin */
-            padding: 8px 20px; /* Reduced padding */
+            margin-top: 10px;
+            padding: 8px 20px;
             background: linear-gradient(90deg, #4A90E2, #4A90E2);
             color: #FFFFFF;
             text-decoration: none;
-            border-radius: 20px; /* Smaller radius */
-            font-size: 14px; /* Smaller font */
+            border-radius: 20px;
+            font-size: 14px;
             font-weight: 600;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         a.cancel-btn:hover {
-            transform: translateY(-2px); /* Smaller lift */
+            transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(74, 144, 226, 0.6);
         }
         footer {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
-            padding: 15px; /* Reduced padding */
+            padding: 15px;
             text-align: center;
             box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.4);
             flex-shrink: 0;
@@ -214,15 +216,15 @@
         footer .links a {
             color: #FF5722;
             text-decoration: none;
-            margin: 0 10px; /* Reduced margin */
-            font-size: 12px; /* Smaller font */
+            margin: 0 10px;
+            font-size: 12px;
             transition: color 0.3s ease;
         }
         footer .links a:hover {
             color: #4A90E2;
         }
         footer p {
-            font-size: 10px; /* Smaller font */
+            font-size: 10px;
             color: #CCCCCC;
             margin: 0;
         }
@@ -231,7 +233,8 @@
             .container { padding: 10px; }
             h2 { font-size: 20px; }
             th, td { padding: 6px; font-size: 12px; }
-            input[type="text"] { font-size: 11px; }
+            input[type="text"],
+            input[type="email"] { font-size: 11px; }
             input[type="submit"] { padding: 6px 15px; font-size: 12px; }
             a.cancel-btn { padding: 6px 15px; font-size: 12px; }
         }
@@ -242,7 +245,8 @@
             h2 { font-size: 18px; }
             th, td { padding: 4px; font-size: 10px; }
             label { font-size: 12px; }
-            input[type="text"] { font-size: 10px; padding: 5px; }
+            input[type="text"],
+            input[type="email"] { font-size: 10px; padding: 5px; }
             input[type="submit"] { padding: 5px 12px; font-size: 11px; }
             a.cancel-btn { padding: 5px 12px; font-size: 11px; }
             footer .links a { display: block; margin: 3px 0; }

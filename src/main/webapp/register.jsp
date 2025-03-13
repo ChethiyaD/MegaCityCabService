@@ -28,7 +28,7 @@
         body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Ensure body takes at least full viewport height */
+            min-height: 100vh;
         }
         header {
             background: linear-gradient(90deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
@@ -56,14 +56,13 @@
         }
         .container {
             width: 100%;
-            max-width: 600px; /* Consistent with profile pages */
+            max-width: 600px;
             padding: 20px;
             background: linear-gradient(135deg, rgba(45, 64, 89, 0.95), rgba(34, 40, 49, 0.95));
             border-radius: 15px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
             text-align: center;
             animation: fadeIn 0.6s ease-in-out;
-            /* Removed max-height and overflow-y to allow page-level scrolling */
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -127,6 +126,17 @@
             outline: none;
             box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
             border-color: #FF5722;
+        }
+        input.invalid {
+            border: 1px solid #F44336;
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        .error-text {
+            color: #F44336;
+            font-size: 12px;
+            display: none;
+            margin-top: 5px;
+            text-align: left;
         }
         button[type="submit"] {
             padding: 10px 25px;
@@ -206,6 +216,144 @@
                     }, 500);
                 }, 3000);
             }
+
+            // Real-time validation
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const nameInput = document.getElementById('name');
+            const addressInput = document.getElementById('address');
+            const phoneInput = document.getElementById('phone');
+            const nicInput = document.getElementById('nic');
+
+            usernameInput.addEventListener('input', validateUsername);
+            passwordInput.addEventListener('input', validatePassword);
+            nameInput.addEventListener('input', validateName);
+            addressInput.addEventListener('input', validateAddress);
+            phoneInput.addEventListener('input', validatePhone);
+            nicInput.addEventListener('input', validateNic);
+
+            function validateUsername() {
+                const username = usernameInput.value.trim();
+                let isValid = true;
+                let errorMsg = '';
+                const errorElement = document.getElementById('username-error');
+
+                if (username.length < 3) {
+                    isValid = false;
+                    errorMsg = 'Username must be at least 3 characters long';
+                } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                    isValid = false;
+                    errorMsg = 'Username can only contain letters, numbers, and underscores';
+                }
+
+                toggleError(usernameInput, errorElement, isValid, errorMsg);
+                return isValid;
+            }
+
+            function validatePassword() {
+                const password = passwordInput.value.trim();
+                let isValid = true;
+                let errorMsg = '';
+                const errorElement = document.getElementById('password-error');
+
+                if (password.length < 6) {
+                    isValid = false;
+                    errorMsg = 'Password must be at least 6 characters long';
+                } else if (!/[A-Z]/.test(password)) {
+                    isValid = false;
+                    errorMsg = 'Password must contain at least one uppercase letter';
+                } else if (!/[0-9]/.test(password)) {
+                    isValid = false;
+                    errorMsg = 'Password must contain at least one number';
+                }
+
+                toggleError(passwordInput, errorElement, isValid, errorMsg);
+                return isValid;
+            }
+
+            function validateName() {
+                const name = nameInput.value.trim();
+                let isValid = true;
+                let errorMsg = '';
+                const errorElement = document.getElementById('name-error');
+
+                if (name.length < 2) {
+                    isValid = false;
+                    errorMsg = 'Name must be at least 2 characters long';
+                } else if (!/^[a-zA-Z\s]+$/.test(name)) {
+                    isValid = false;
+                    errorMsg = 'Name can only contain letters and spaces';
+                }
+
+                toggleError(nameInput, errorElement, isValid, errorMsg);
+                return isValid;
+            }
+
+            function validateAddress() {
+                const address = addressInput.value.trim();
+                let isValid = true;
+                let errorMsg = '';
+                const errorElement = document.getElementById('address-error');
+
+                if (address.length < 5) {
+                    isValid = false;
+                    errorMsg = 'Address must be at least 5 characters long';
+                }
+
+                toggleError(addressInput, errorElement, isValid, errorMsg);
+                return isValid;
+            }
+
+            function validatePhone() {
+                const phone = phoneInput.value.trim();
+                let isValid = true;
+                let errorMsg = '';
+                const errorElement = document.getElementById('phone-error');
+
+                if (!/^\d{10}$/.test(phone)) {
+                    isValid = false;
+                    errorMsg = 'Phone must be exactly 10 digits';
+                }
+
+                toggleError(phoneInput, errorElement, isValid, errorMsg);
+                return isValid;
+            }
+
+            function validateNic() {
+                const nic = nicInput.value.trim();
+                let isValid = true;
+                let errorMsg = '';
+                const errorElement = document.getElementById('nic-error');
+
+                if (!/^\d{9}[vV]|\d{12}$/.test(nic)) {
+                    isValid = false;
+                    errorMsg = 'NIC must be 9 digits followed by "V" or "v" or 12 digits';
+                }
+
+                toggleError(nicInput, errorElement, isValid, errorMsg);
+                return isValid;
+            }
+
+            function toggleError(input, errorElement, isValid, errorMsg) {
+                if (!isValid) {
+                    input.classList.add('invalid');
+                    errorElement.textContent = errorMsg;
+                    errorElement.style.display = 'block';
+                } else {
+                    input.classList.remove('invalid');
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            window.validateForm = function() {
+                const isUsernameValid = validateUsername();
+                const isPasswordValid = validatePassword();
+                const isNameValid = validateName();
+                const isAddressValid = validateAddress();
+                const isPhoneValid = validatePhone();
+                const isNicValid = validateNic();
+                return isUsernameValid && isPasswordValid && isNameValid && isAddressValid && isPhoneValid && isNicValid;
+            };
         };
     </script>
 </head>
@@ -219,12 +367,14 @@
 <main>
     <div class="container">
         <div id="message"></div>
-        <form action="register" method="post" enctype="multipart/form-data">
+        <form action="register" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
+            <span id="username-error" class="error-text"></span>
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
+            <span id="password-error" class="error-text"></span>
 
             <label for="role">Role:</label>
             <select id="role" name="role" required>
@@ -234,15 +384,19 @@
 
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
+            <span id="name-error" class="error-text"></span>
 
             <label for="address">Address:</label>
             <input type="text" id="address" name="address" required>
+            <span id="address-error" class="error-text"></span>
 
             <label for="phone">Phone:</label>
             <input type="text" id="phone" name="phone" required>
+            <span id="phone-error" class="error-text"></span>
 
             <label for="nic">NIC:</label>
             <input type="text" id="nic" name="nic" required>
+            <span id="nic-error" class="error-text"></span>
 
             <label for="profile_picture">Profile Picture:</label>
             <input type="file" id="profile_picture" name="profile_picture" accept="image/*">

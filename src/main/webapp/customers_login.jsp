@@ -19,54 +19,51 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #222831; /* Dark gray background */
-            background-image: url('images/Customer.jpg'); /* Page background image */
+            background-color: #222831;
+            background-image: url('images/Customer.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #EEEEEE; /* Light gray text */
+            color: #EEEEEE;
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
-            /* Blur effect for the background */
-            backdrop-filter: blur(5px); /* Slight blur */
-            -webkit-backdrop-filter: blur(5px); /* Safari support */
+            overflow-x: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
-        /* Header Styles (Sticky) */
         header {
-            background-color: rgba(45, 64, 89, 0.95); /* Semi-transparent dark blue header */
+            background-color: rgba(45, 64, 89, 0.95);
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            position: sticky; /* Sticky header */
+            position: sticky;
             top: 0;
             z-index: 1000;
-            display: flex; /* Use flexbox for layout */
-            justify-content: space-between; /* Space between home button and title */
-            align-items: center; /* Vertically center items */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
-            font-family: 'Montserrat', sans-serif; /* Beautiful font */
-            font-size: 48px; /* Large, bold title */
-            color: #FF5722; /* Orange title */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            color: #FF5722;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
             transition: color 0.3s ease;
-            flex-grow: 1; /* Allow title to take available space */
-            text-align: center; /* Keep title centered */
+            flex-grow: 1;
+            text-align: center;
         }
 
         header h1:hover {
-            color: #ff7f50; /* Lighter orange on hover */
+            color: #ff7f50;
         }
 
-        /* Home Button Styles */
         .home-btn {
-            background: linear-gradient(90deg, #4A90E2, #4A90E2); /* Blue gradient */
+            background: linear-gradient(90deg, #4A90E2, #4A90E2);
             color: #FFFFFF;
             padding: 10px 20px;
             border-radius: 25px;
@@ -103,21 +100,20 @@
             text-decoration: underline;
         }
 
-        /* Main Content Styles */
         main {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px 0;
-            min-height: calc(100vh - 120px); /* Adjust for header and footer */
+            min-height: calc(100vh - 120px);
         }
 
         .container {
-            max-width: 400px; /* Compact size for login form */
+            max-width: 400px;
             width: 100%;
             padding: 40px;
-            background: rgba(45, 64, 89, 0.9); /* Semi-transparent dark blue container */
+            background: rgba(45, 64, 89, 0.9);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             text-align: center;
@@ -131,9 +127,17 @@
         }
 
         .error {
-            color: #FF4444; /* Red for error messages */
+            color: #FF4444;
             margin-bottom: 15px;
             font-size: 14px;
+        }
+
+        .error-text {
+            color: #FF4444;
+            font-size: 12px;
+            display: none;
+            margin-top: 5px;
+            text-align: left;
         }
 
         form {
@@ -163,12 +167,17 @@
             background-color: rgba(255, 255, 255, 0.2);
         }
 
+        input.invalid {
+            border: 1px solid #FF4444;
+            background-color: rgba(255, 68, 68, 0.1);
+        }
+
         button {
             padding: 12px;
-            background-color: #FF5722; /* Orange button */
+            background-color: #FF5722;
             color: #ffffff;
             border: none;
-            border-radius: 50px; /* Rounded button */
+            border-radius: 50px;
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
@@ -176,7 +185,7 @@
         }
 
         button:hover {
-            background-color: #ff7f50; /* Lighter orange on hover */
+            background-color: #ff7f50;
             transform: translateY(-2px);
         }
 
@@ -200,7 +209,6 @@
             text-decoration: underline;
         }
 
-        /* Password Container for Eye Icon */
         .password-container {
             position: relative;
             width: 100%;
@@ -208,7 +216,7 @@
 
         .password-container input {
             width: 100%;
-            padding-right: 40px; /* Space for the eye icon */
+            padding-right: 40px;
         }
 
         .password-container .toggle-password {
@@ -217,16 +225,15 @@
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #FF5722; /* Orange color for the icon */
+            color: #FF5722;
         }
 
         .password-container .toggle-password:hover {
-            color: #ff7f50; /* Lighter orange on hover */
+            color: #ff7f50;
         }
 
-        /* Footer Styles */
         footer {
-            background-color: rgba(45, 64, 89, 0.95); /* Semi-transparent dark blue footer */
+            background-color: rgba(45, 64, 89, 0.95);
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
@@ -253,87 +260,28 @@
             margin: 0;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            header {
-                padding: 15px;
-            }
-
-            header h1 {
-                font-size: 40px;
-            }
-
-            .home-btn {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-
-            .container {
-                max-width: 90%;
-                padding: 30px;
-            }
-
-            h2 {
-                font-size: 30px;
-            }
-
-            button {
-                font-size: 14px;
-            }
+            header { padding: 15px; }
+            header h1 { font-size: 40px; }
+            .home-btn { padding: 8px 15px; font-size: 14px; }
+            .container { max-width: 90%; padding: 30px; }
+            h2 { font-size: 30px; }
+            button { font-size: 14px; }
         }
 
         @media (max-width: 480px) {
-            header {
-                padding: 10px;
-                flex-wrap: wrap; /* Allow wrapping if space is tight */
-            }
-
-            header h1 {
-                font-size: 32px;
-                order: 1; /* Ensure title stays in the center */
-                flex-basis: 100%; /* Take full width on small screens */
-                text-align: center;
-            }
-
-            .home-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-                order: 0; /* Place home button first */
-                margin-bottom: 10px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-
-            h2 {
-                font-size: 24px;
-            }
-
-            label {
-                font-size: 14px;
-            }
-
-            input {
-                font-size: 12px;
-            }
-
-            button {
-                font-size: 12px;
-                padding: 10px;
-            }
-
-            a {
-                font-size: 12px;
-            }
-
-            footer .links a {
-                display: block;
-                margin: 5px 0;
-            }
+            header { padding: 10px; flex-wrap: wrap; }
+            header h1 { font-size: 32px; order: 1; flex-basis: 100%; text-align: center; }
+            .home-btn { padding: 6px 12px; font-size: 12px; order: 0; margin-bottom: 10px; }
+            .container { padding: 20px; }
+            h2 { font-size: 24px; }
+            label { font-size: 14px; }
+            input { font-size: 12px; }
+            button { font-size: 12px; padding: 10px; }
+            a { font-size: 12px; }
+            footer .links a { display: block; margin: 5px 0; }
         }
 
-        /* Animations */
         @keyframes buttonClick {
             0% { transform: scale(1); }
             50% { transform: scale(0.95); }
@@ -342,7 +290,6 @@
     </style>
 </head>
 <body>
-<!-- Header -->
 <header>
     <a href="home.jsp" class="home-btn">Home</a>
     <h1 id="title">MegaCityCab</h1>
@@ -351,7 +298,6 @@
     </div>
 </header>
 
-<!-- Main Content -->
 <main>
     <div class="container">
         <h2>Customer Login</h2>
@@ -359,14 +305,18 @@
             if (error != null) { %>
         <p class="error"><%= error %></p>
         <% } %>
-        <form action="login" method="post">
+        <form action="login" method="post" onsubmit="return validateForm()">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
+            <span id="username-error" class="error-text"></span>
+
             <label for="password">Password:</label>
             <div class="password-container">
                 <input type="password" id="password" name="password" required>
                 <i class="fas fa-eye toggle-password" id="togglePasswordIcon" onclick="togglePassword()"></i>
             </div>
+            <span id="password-error" class="error-text"></span>
+
             <button type="submit">Login</button>
         </form>
         <p><a href="reset_password_step1.jsp">Forgot Password?</a></p>
@@ -374,7 +324,6 @@
     </div>
 </main>
 
-<!-- Footer -->
 <footer>
     <div class="links">
         <a href="about.jsp">About Us</a>
@@ -383,17 +332,14 @@
     <p>© 2025 MegaCityCab. All rights reserved.</p>
 </footer>
 
-<!-- JavaScript for Admin Login reveal, button animation, and password toggle -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Ensure the page starts at the top
         window.scrollTo(0, 0);
 
         const title = document.getElementById('title');
         const adminLogin = document.getElementById('admin-login');
         let clickCount = 0;
 
-        // Reveal Admin Login after 3 clicks on the title
         title.addEventListener('click', () => {
             clickCount++;
             if (clickCount === 3) {
@@ -401,16 +347,14 @@
             }
         });
 
-        // Button click animation
         const buttons = document.querySelectorAll('button');
         buttons.forEach(button => {
             button.addEventListener('click', () => {
                 button.classList.add('clicked');
-                setTimeout(() => button.classList.remove('clicked'), 300); // Remove class after animation
+                setTimeout(() => button.classList.remove('clicked'), 300);
             });
         });
 
-        // Toggle password visibility
         window.togglePassword = function() {
             const passwordInput = document.getElementById("password");
             const toggleIcon = document.getElementById("togglePasswordIcon");
@@ -423,6 +367,72 @@
                 toggleIcon.classList.remove("fa-eye-slash");
                 toggleIcon.classList.add("fa-eye");
             }
+        };
+
+        // Real-time validation
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const usernameError = document.getElementById('username-error');
+        const passwordError = document.getElementById('password-error');
+
+        usernameInput.addEventListener('input', validateUsername);
+        passwordInput.addEventListener('input', validatePassword);
+
+        function validateUsername() {
+            const username = usernameInput.value.trim();
+            let isValid = true;
+            let errorMsg = '';
+
+            if (username.length < 3) {
+                isValid = false;
+                errorMsg = 'Username must be at least 3 characters long';
+            } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                isValid = false;
+                errorMsg = 'Username can only contain letters, numbers, and underscores';
+            }
+
+            if (!isValid) {
+                usernameInput.classList.add('invalid');
+                usernameError.textContent = errorMsg;
+                usernameError.style.display = 'block';
+            } else {
+                usernameInput.classList.remove('invalid');
+                usernameError.style.display = 'none';
+            }
+            return isValid;
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value.trim();
+            let isValid = true;
+            let errorMsg = '';
+
+            if (password.length < 6) {
+                isValid = false;
+                errorMsg = 'Password must be at least 6 characters long';
+            } else if (!/[A-Z]/.test(password)) {
+                isValid = false;
+                errorMsg = 'Password must contain at least one uppercase letter';
+            } else if (!/[0-9]/.test(password)) {
+                isValid = false;
+                errorMsg = 'Password must contain at least one number';
+            }
+
+            if (!isValid) {
+                passwordInput.classList.add('invalid');
+                passwordError.textContent = errorMsg;
+                passwordError.style.display = 'block';
+            } else {
+                passwordInput.classList.remove('invalid');
+                passwordError.style.display = 'none';
+            }
+            return isValid;
+        }
+
+        window.validateForm = function() {
+            const isUsernameValid = validateUsername();
+            const isPasswordValid = validatePassword();
+            return isUsernameValid && isPasswordValid;
         };
     });
 </script>
