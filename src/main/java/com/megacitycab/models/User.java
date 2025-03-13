@@ -11,7 +11,6 @@ public class User {
     private String profilePicture;
     private int experience;
     private String status;
-    private String email; // New field
 
     // Constructor for registration (without experience and status)
     public User(String username, String password, String role, String name, String address, String phone, String nic, String profilePicture) {
@@ -23,7 +22,6 @@ public class User {
         this.phone = phone;
         this.nic = nic;
         this.profilePicture = profilePicture;
-        this.email = null; // Default to null
     }
 
     // Constructor for Add/Edit Customer (with experience and status)
@@ -38,7 +36,6 @@ public class User {
         this.profilePicture = profilePicture;
         this.experience = experience;
         this.status = status;
-        this.email = null; // Default to null
     }
 
     // Getters and setters
@@ -72,7 +69,4 @@ public class User {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
-    // New getter and setter for email
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
 }

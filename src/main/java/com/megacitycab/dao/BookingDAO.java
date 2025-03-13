@@ -18,10 +18,9 @@ public class BookingDAO {
         }
     }
 
-
     public boolean createBooking(Booking booking) {
-        String query = "INSERT INTO bookings (customer_username, car_id, driver_username, pickup_location, dropoff_location, status, estimated_bill) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String updateCarQuery = "UPDATE cars SET availability = 0 WHERE id = ?"; // Mark car as unavailable
+        String query = "INSERT INTO bookings (customer_username, car_id, driver_username, pickup_location, dropoff_location, status, estimated_bill, booking_time, cancelled_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String updateCarQuery = "UPDATE cars SET availability = 0 WHERE id = ?";
 
         try (PreparedStatement stmt = conn.prepareStatement(query);
              PreparedStatement updateStmt = conn.prepareStatement(updateCarQuery)) {
@@ -32,14 +31,13 @@ public class BookingDAO {
             stmt.setString(4, booking.getPickupLocation());
             stmt.setString(5, booking.getDropoffLocation());
             stmt.setString(6, booking.getStatus());
-
-            // Store 0.0 instead of "Calculating..." to avoid the MySQL error
             stmt.setDouble(7, 0.0);
+            stmt.setTimestamp(8, booking.getBookingTime() != null ? booking.getBookingTime() : new Timestamp(System.currentTimeMillis()));
+            stmt.setString(9, booking.getCancelledBy());
 
             int rowsInserted = stmt.executeUpdate();
 
             if (rowsInserted > 0) {
-                // Update the car availability
                 updateStmt.setInt(1, booking.getCarId());
                 updateStmt.executeUpdate();
                 return true;
@@ -50,15 +48,12 @@ public class BookingDAO {
         return false;
     }
 
-
-
-
-
     public List<Booking> getCustomerBookings(String customerUsername) {
         List<Booking> bookings = new ArrayList<>();
         String query = "SELECT b.id, b.customer_username, b.car_id, c.car_number, c.car_name, c.image AS car_image, " +
                 "u.username AS driver_username, u.profile_picture AS driver_image, " +
-                "b.pickup_location, b.dropoff_location, b.status, b.estimated_bill, b.distance " +
+                "b.pickup_location, b.dropoff_location, b.status, b.estimated_bill, b.distance, " +
+                "b.booking_time, b.cancelled_by " +
                 "FROM bookings b " +
                 "JOIN cars c ON b.car_id = c.id " +
                 "LEFT JOIN users u ON b.driver_username = u.username " +
@@ -69,7 +64,7 @@ public class BookingDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                bookings.add(new Booking(
+                Booking booking = new Booking(
                         rs.getInt("id"),
                         rs.getString("customer_username"),
                         rs.getInt("car_id"),
@@ -82,8 +77,11 @@ public class BookingDAO {
                         rs.getString("dropoff_location"),
                         rs.getString("status"),
                         rs.getDouble("estimated_bill"),
-                        rs.getDouble("distance")
-                ));
+                        rs.getDouble("distance"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("cancelled_by")
+                );
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,12 +89,12 @@ public class BookingDAO {
         return bookings;
     }
 
-
     public List<Booking> getBookingsByCustomer(String username) {
         List<Booking> bookings = new ArrayList<>();
         String query = "SELECT b.id, b.customer_username, b.car_id, c.car_number, c.car_name, c.image AS car_image, " +
                 "u.username AS driver_username, u.profile_picture AS driver_image, " +
-                "b.pickup_location, b.dropoff_location, b.status, b.estimated_bill, b.distance " +
+                "b.pickup_location, b.dropoff_location, b.status, b.estimated_bill, b.distance, " +
+                "b.booking_time, b.cancelled_by " +
                 "FROM bookings b " +
                 "JOIN cars c ON b.car_id = c.id " +
                 "LEFT JOIN users u ON b.driver_username = u.username " +
@@ -107,7 +105,7 @@ public class BookingDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                bookings.add(new Booking(
+                Booking booking = new Booking(
                         rs.getInt("id"),
                         rs.getString("customer_username"),
                         rs.getInt("car_id"),
@@ -120,15 +118,17 @@ public class BookingDAO {
                         rs.getString("dropoff_location"),
                         rs.getString("status"),
                         rs.getDouble("estimated_bill"),
-                        rs.getDouble("distance")
-                ));
+                        rs.getDouble("distance"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("cancelled_by")
+                );
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return bookings;
     }
-
 
     public boolean confirmBooking(int bookingId, double billAmount, double distance) {
         String query = "UPDATE bookings SET status = 'Confirmed', estimated_bill = ?, distance = ? WHERE id = ? AND status = 'Pending'";
@@ -147,11 +147,10 @@ public class BookingDAO {
             }
             return false;
         } catch (SQLException e) {
-            e.printStackTrace(); // Consider using a logger like SLF4J instead
+            e.printStackTrace();
             return false;
         }
     }
-
 
     public void markDriverAsUnavailable(String driverUsername) {
         String query = "UPDATE users SET status = 'Unavailable' WHERE username = ?";
@@ -162,7 +161,6 @@ public class BookingDAO {
             e.printStackTrace();
         }
     }
-
 
     private String getDriverUsernameByBookingId(int bookingId) {
         String query = "SELECT driver_username FROM bookings WHERE id = ?";
@@ -179,12 +177,12 @@ public class BookingDAO {
         return null;
     }
 
-
     public List<Booking> getBookingsByDriver(String driverUsername) {
         List<Booking> bookings = new ArrayList<>();
         String query = "SELECT b.id, b.customer_username, b.car_id, c.car_number, c.car_name, c.image AS car_image, " +
                 "u.username AS driver_username, u.profile_picture AS driver_image, " +
-                "b.pickup_location, b.dropoff_location, b.status, b.estimated_bill, b.distance " +
+                "b.pickup_location, b.dropoff_location, b.status, b.estimated_bill, b.distance, " +
+                "b.booking_time, b.cancelled_by " +
                 "FROM bookings b " +
                 "JOIN cars c ON b.car_id = c.id " +
                 "LEFT JOIN users u ON b.driver_username = u.username " +
@@ -195,7 +193,7 @@ public class BookingDAO {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                bookings.add(new Booking(
+                Booking booking = new Booking(
                         rs.getInt("id"),
                         rs.getString("customer_username"),
                         rs.getInt("car_id"),
@@ -208,15 +206,17 @@ public class BookingDAO {
                         rs.getString("dropoff_location"),
                         rs.getString("status"),
                         rs.getDouble("estimated_bill"),
-                        rs.getDouble("distance")
-                ));
+                        rs.getDouble("distance"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("cancelled_by")
+                );
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return bookings;
     }
-
 
     public double getFarePerKm(int carId) {
         String query = "SELECT fare_per_km FROM cars WHERE id = ?";
@@ -232,7 +232,6 @@ public class BookingDAO {
         return 0.0;
     }
 
-
     public boolean cancelBooking(int bookingId) {
         String updateBookingQuery = "UPDATE bookings SET status = ? WHERE id = ?";
         String updateCarQuery = "UPDATE cars SET availability = 1 WHERE id = (SELECT car_id FROM bookings WHERE id = ?)";
@@ -240,20 +239,17 @@ public class BookingDAO {
         try (PreparedStatement stmt = conn.prepareStatement(updateBookingQuery);
              PreparedStatement carStmt = conn.prepareStatement(updateCarQuery)) {
 
-            // Update booking status to "Cancelled"
-            stmt.setString(1, "Cancelled"); // Use "Cancelled" (correct ENUM value)
+            stmt.setString(1, "Cancelled");
             stmt.setInt(2, bookingId);
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Make the assigned car available again
                 carStmt.setInt(1, bookingId);
                 carStmt.executeUpdate();
 
-                // Get driver assigned to this booking
                 String driverUsername = getDriverUsernameByBookingId(bookingId);
                 if (driverUsername != null && !driverUsername.isEmpty()) {
-                    markDriverAsAvailable(driverUsername); // Make driver available again
+                    markDriverAsAvailable(driverUsername);
                 }
                 return true;
             }
@@ -289,9 +285,6 @@ public class BookingDAO {
         return false;
     }
 
-
-
-
     public void markDriverAsAvailable(String driverUsername) {
         String query = "UPDATE users SET status = 'Available' WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -302,7 +295,6 @@ public class BookingDAO {
         }
     }
 
-    // Update Booking Status (For Payment & Cancellation)
     public boolean updateBookingStatus(int bookingId, double totalAmount) {
         String query = "UPDATE bookings SET status = 'Completed', estimated_bill = ? WHERE id = ?";
 
@@ -317,8 +309,6 @@ public class BookingDAO {
         return false;
     }
 
-
-    // Calculate Discount for Repeat Customers
     public double calculateDiscount(String customerUsername, String driverUsername) {
         String query = "SELECT COUNT(*) FROM bookings WHERE customer_username = ? AND driver_username = ?";
 
@@ -328,15 +318,14 @@ public class BookingDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next() && rs.getInt(1) > 1) {
-                return 0.10; // 10% discount if booked the same driver before
+                return 0.10;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0.0; // No discount
+        return 0.0;
     }
 
-    // Get Booking by ID (Used in Payment Processing)
     public Booking getBookingById(int bookingId) {
         String query = "SELECT * FROM bookings WHERE id = ?";
 
@@ -354,7 +343,9 @@ public class BookingDAO {
                         rs.getString("dropoff_location"),
                         rs.getString("status"),
                         rs.getDouble("estimated_bill"),
-                        rs.getDouble("distance")
+                        rs.getDouble("distance"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("cancelled_by")
                 );
             }
         } catch (SQLException e) {
@@ -372,7 +363,7 @@ public class BookingDAO {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt(1) > 0; // If count > 0, customer has booked this driver before
+                return rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -382,13 +373,13 @@ public class BookingDAO {
 
     public List<Booking> getAllBookings() {
         List<Booking> bookings = new ArrayList<>();
-        String query = "SELECT * FROM bookings"; // Get all bookings (all statuses)
+        String query = "SELECT * FROM bookings";
 
         try (PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                bookings.add(new Booking(
+                Booking booking = new Booking(
                         rs.getInt("id"),
                         rs.getString("customer_username"),
                         rs.getInt("car_id"),
@@ -397,8 +388,11 @@ public class BookingDAO {
                         rs.getString("dropoff_location"),
                         rs.getString("status"),
                         rs.getDouble("estimated_bill"),
-                        rs.getDouble("distance")
-                ));
+                        rs.getDouble("distance"),
+                        rs.getTimestamp("booking_time"),
+                        rs.getString("cancelled_by")
+                );
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -411,12 +405,10 @@ public class BookingDAO {
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, bookingId);
             int rowsDeleted = stmt.executeUpdate();
-            return rowsDeleted > 0;  // Return true if booking was deleted
+            return rowsDeleted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
-
-
 }

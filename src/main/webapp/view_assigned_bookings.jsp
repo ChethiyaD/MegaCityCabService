@@ -34,7 +34,7 @@
             height: 100%;
             font-family: 'Roboto', sans-serif;
             background-color: #222831;
-            background-image: url('images/Customer.jpg');
+            background-image: url('images/Driver.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;

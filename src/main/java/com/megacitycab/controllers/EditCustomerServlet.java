@@ -26,10 +26,9 @@ public class EditCustomerServlet extends HttpServlet {
         String nic = request.getParameter("nic");
         String address = request.getParameter("address");
         String status = request.getParameter("status");
-        String email = request.getParameter("email"); // Capture email
 
-        if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty()) {
-            response.sendRedirect("manage_customers.jsp?error=Username and Email cannot be empty");
+        if (username == null || username.trim().isEmpty()) {
+            response.sendRedirect("manage_customers.jsp?error=Username cannot be empty");
             return;
         }
 
@@ -63,7 +62,6 @@ public class EditCustomerServlet extends HttpServlet {
         }
 
         User customer = new User(username, password, "customer", name, address, phone, nic, fileName, 0, status);
-        customer.setEmail(email); // Set email
 
         if (userDAO.updateCustomer(customer)) {
             response.sendRedirect("manage_customers.jsp?success=Customer updated successfully");

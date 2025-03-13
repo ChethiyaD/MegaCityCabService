@@ -21,6 +21,17 @@ public class AuthController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
+        // Get the source parameter to determine the context
+        String source = request.getParameter("source");
+        String redirectOnFailure = "index.jsp"; // Default to admin login page for initial attempts
+
+        // Determine the context based on the source parameter
+        if ("customer".equalsIgnoreCase(source)) {
+            redirectOnFailure = "customer_login.jsp";
+        } else if ("driver".equalsIgnoreCase(source)) {
+            redirectOnFailure = "drivers_login.jsp";
+        }
+
         if (user != null) {
             // Store the full User object in session
             HttpSession session = request.getSession();
@@ -41,7 +52,7 @@ public class AuthController extends HttpServlet {
                 redirectUrl = "customer_dashboard.jsp";
             } else {
                 System.out.println("DEBUG: Unknown role: " + user.getRole());
-                redirectUrl = "index.jsp?error=Unknown role";
+                redirectUrl = "home.jsp?error=Unknown role";
                 out.println("<script type='text/javascript'>");
                 out.println("alert('Unknown role assigned');");
                 out.println("window.location.href = '" + redirectUrl + "';");
@@ -58,7 +69,7 @@ public class AuthController extends HttpServlet {
             System.out.println("DEBUG: Invalid credentials for username: " + username);
             out.println("<script type='text/javascript'>");
             out.println("alert('Invalid credentials');");
-            out.println("window.location.href = 'index.jsp?error=Invalid credentials';");
+            out.println("window.location.href = '" + redirectOnFailure + "?error=Invalid credentials';");
             out.println("</script>");
         }
     }
